@@ -48,6 +48,10 @@ struct Player {
 	// uint16_t score = 0
 };
 
+struct Block {
+	glm::vec2 left_down_corner = glm::vec2(0.0f, 0.0f);
+};
+
 struct Game {
 	std::list< Player > players; //(using list so they can have stable addresses)
 	Player *spawn_player(); //add player the end of the players list (may also, e.g., play some spawn anim)
@@ -68,6 +72,10 @@ struct Game {
 	//arena size:
 	inline static constexpr glm::vec2 ArenaMin = glm::vec2(-1.0f, -1.0f);
 	inline static constexpr glm::vec2 ArenaMax = glm::vec2( 1.0f,  1.0f);
+
+	//blockes:
+	std::list< Block > blocks = {Block{}};
+	float block_size = 0.2f;
 
 	//player constants:
 	inline static constexpr float PlayerRadius = 0.06f;

@@ -74,6 +74,7 @@ void PlayMode::update(float elapsed) {
 	controls.send_controls_message(&client.connection);
 
 	//reset button press counters:
+
 	controls.left.downs = 0;
 	controls.right.downs = 0;
 	controls.up.downs = 0;
@@ -165,6 +166,17 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 		lines.draw(glm::vec3(Game::ArenaMin.x, Game::ArenaMax.y, 0.0f), glm::vec3(Game::ArenaMax.x, Game::ArenaMax.y, 0.0f), glm::u8vec4(0xff, 0x00, 0xff, 0xff));
 		lines.draw(glm::vec3(Game::ArenaMin.x, Game::ArenaMin.y, 0.0f), glm::vec3(Game::ArenaMin.x, Game::ArenaMax.y, 0.0f), glm::u8vec4(0xff, 0x00, 0xff, 0xff));
 		lines.draw(glm::vec3(Game::ArenaMax.x, Game::ArenaMin.y, 0.0f), glm::vec3(Game::ArenaMax.x, Game::ArenaMax.y, 0.0f), glm::u8vec4(0xff, 0x00, 0xff, 0xff));
+
+		for (auto const &block: game.blocks) {
+			float corner_xleft = block.left_down_corner.x;
+			float corner_xright = block.left_down_corner.x + game.block_size;
+			float corner_ybottom = block.left_down_corner.y;
+			float corner_ytop = block.left_down_corner.y + game.block_size;
+			lines.draw(glm::vec3(corner_xleft, corner_ybottom, 0.0f), glm::vec3(corner_xright, corner_ybottom, 0.0f), glm::u8vec4(0xff, 0xff, 0x00, 0xff));
+			lines.draw(glm::vec3(corner_xleft, corner_ytop, 0.0f), glm::vec3(corner_xright, corner_ytop, 0.0f), glm::u8vec4(0xff, 0xff, 0x00, 0xff));
+			lines.draw(glm::vec3(corner_xleft, corner_ybottom, 0.0f), glm::vec3(corner_xleft, corner_ytop, 0.0f), glm::u8vec4(0xff, 0xff, 0x00, 0xff));
+			lines.draw(glm::vec3(corner_xright, corner_ybottom, 0.0f), glm::vec3(corner_xright, corner_ytop, 0.0f), glm::u8vec4(0xff, 0xff, 0x00, 0xff));
+		}
 
 		for (auto const &player : game.players) {
 			glm::u8vec4 col = glm::u8vec4(player.color.x*255, player.color.y*255, player.color.z*255, 0xff);
