@@ -9,8 +9,8 @@
             "type": "cppdbg",
             "request": "launch",
             "cwd": ".",
-            "program": "${workspaceFolder}/dist/game",
-            "args": [],
+            "program": "${workspaceFolder}/dist/server",
+            "args": ["80"],
             "stopAtEntry": false,
             "environment": [],
             "windows": {

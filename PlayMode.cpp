@@ -11,6 +11,9 @@
 #include <random>
 #include <array>
 
+
+
+
 PlayMode::PlayMode(Client &client_) : client(client_) {
 }
 
@@ -147,6 +150,17 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 				glm::u8vec4(0xff, 0xff, 0xff, 0x00));
 		};
 
+
+		glm::vec2 secoreBoardMin = glm::vec2((float)Game::ArenaMax.x + 0.01f, (float)Game::ArenaMin.y);
+		glm::vec2 secoreBoardMax = glm::vec2((float)Game::ArenaMax.x + 0.5f, (float)Game::ArenaMax.y);
+
+		lines.draw(glm::vec3(secoreBoardMin.x, secoreBoardMin.y, 0.0f), glm::vec3(secoreBoardMax.x, secoreBoardMin.y, 0.0f), glm::u8vec4(0xff, 0x00, 0xff, 0xff));
+		lines.draw(glm::vec3(secoreBoardMin.x, secoreBoardMax.y, 0.0f), glm::vec3(secoreBoardMax.x, secoreBoardMax.y, 0.0f), glm::u8vec4(0xff, 0x00, 0xff, 0xff));
+		lines.draw(glm::vec3(secoreBoardMin.x, secoreBoardMin.y, 0.0f), glm::vec3(secoreBoardMin.x, secoreBoardMax.y, 0.0f), glm::u8vec4(0xff, 0x00, 0xff, 0xff));
+		lines.draw(glm::vec3(secoreBoardMax.x, secoreBoardMin.y, 0.0f), glm::vec3(secoreBoardMax.x, secoreBoardMax.y, 0.0f), glm::u8vec4(0xff, 0x00, 0xff, 0xff));
+
+
+		//float moveX = -100.0f;
 		lines.draw(glm::vec3(Game::ArenaMin.x, Game::ArenaMin.y, 0.0f), glm::vec3(Game::ArenaMax.x, Game::ArenaMin.y, 0.0f), glm::u8vec4(0xff, 0x00, 0xff, 0xff));
 		lines.draw(glm::vec3(Game::ArenaMin.x, Game::ArenaMax.y, 0.0f), glm::vec3(Game::ArenaMax.x, Game::ArenaMax.y, 0.0f), glm::u8vec4(0xff, 0x00, 0xff, 0xff));
 		lines.draw(glm::vec3(Game::ArenaMin.x, Game::ArenaMin.y, 0.0f), glm::vec3(Game::ArenaMin.x, Game::ArenaMax.y, 0.0f), glm::u8vec4(0xff, 0x00, 0xff, 0xff));
@@ -176,6 +190,11 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 			}
 
 			draw_text(player.position + glm::vec2(0.0f, -0.1f + Game::PlayerRadius), player.name, 0.09f);
+
+			//drawing score draws at the topright corner for now
+			std::string inputString = std::to_string(0);
+			glm::vec2 scorePos = glm::vec2(secoreBoardMin.x + 0.01f,secoreBoardMax.y-0.2f);
+			draw_text(scorePos, player.name +  ": "+ inputString, 0.09f);
 		}
 	}
 	GL_ERRORS();
