@@ -12,6 +12,23 @@
 #include <array>
 
 
+//Basic that meets game requirement 
+// Only 2 person, raise error if third join Chen
+//1. Loading text into map  Chen 
+//2. Scoreboard two players updating Chen
+//3. Player mode-switching predator vs prey Chen
+//4. Different player should appear differently Chen
+//5. Player-player collision Zhao
+//6. Time (猎杀时间) Zhao
+//7. Player-object collision consumption Zhao 
+//8. Spawn consumable (After I've down map)
+//9. different consumable should appear differently Note: diffirent color solid circle Zhao 
+
+
+//Extra feature:
+//7.Skill list: 蓄力，加速, 减速弹，眩晕弹
+//8.Different music for Different player
+
 
 
 PlayMode::PlayMode(Client &client_) : client(client_) {
