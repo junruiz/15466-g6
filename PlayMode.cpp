@@ -180,6 +180,9 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 		};
 
 
+		;
+
+
 		glm::vec2 scoreBoardMin = glm::vec2((float)Game::ArenaMax.x + 0.01f, (float)Game::ArenaMin.y);
 		glm::vec2 scoreBoardMax = glm::vec2((float)Game::ArenaMax.x + 0.5f, (float)Game::ArenaMax.y);
 
