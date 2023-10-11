@@ -1,32 +1,32 @@
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 X              XX              X
+X    o o o     XX     o o o    X
+XXXXXXXXXX            XXXXXXXXXX
+X      .       XX     o o o    X
+X    o .       XX     .        X
+X      .       XX       ...    X
+X      .       XX          .   X
+X      .       XX           .  X
+X    o.o.o     XX     o.o.o.   X
 X              XX              X
-X              XX              X
-X              XX           2  X
-X              XX              X
-X              XX              X
-X              XX              X
-X              XX              X
-X              XX              X
-X              XX              X
-X              XX              X
-X              XX              X
-X              XX              X
-X         o               o    X
-XXXXXXXXXXXXX       XXXXXXXXXXXX
-XXXXXXXXXXXXX       XXXXXXXXXXXX
+X           .    .             X
+X     o     .    .       2     X
+X           .    .             X
+X            ......        o   X
+XXXXXXXXXXXXX   .   XXXXXXXXXXXX
+XXXXXXXXXXXXX   .   XXXXXXXXXXXX
 X                              X
+X     o.o      XX     ....     X
+X   .          XX   .          X
+X   ......     XX   ......     X
+X   .     .    XX   .     .    X
+X   .     .    XX   .     .    X
+X    .....     XX    o.o.o     X
 X              XX              X
+X        o     XX     o        X
+X        o     XX     o        X
 X              XX              X
+X        .     XX     .        X
+X   1      ....XX....          X
 X              XX              X
-X              XX              X
-X              XX              X
-X              XX              X
-X              XX              X
-X              XX              X
-X              XX              X
-X              XX              X
-X              XX              X
-X              XX              X
-X  1           XX              X
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

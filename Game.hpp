@@ -99,18 +99,16 @@ struct Game {
 	int predator = 1;
 
 	//Consumables:
-	std::list< Consumable > consumables = {Consumable{glm::vec2(0.3f, 0.3f)}, 
-	Consumable{glm::vec2(0.7f, 0.7f),Consumable::big,glm::u8vec4(rand() % 255, rand() % 255, rand() % 255, 0xff),false}, 
-	Consumable{glm::vec2(-0.5f, -0.5f), Consumable::big,glm::u8vec4(rand() % 255, rand() % 255, rand() % 255, 0xff),false}};
+	std::list< Consumable > consumables = {};
 
 	//blockes:
-	std::list< Block > blocks = {Block{}};
+	std::list< Block > blocks = {};
 	map MAP = {};
 	
 	//default length 16
 	int map_line_length = 16;
 	float block_size = 2.0f / map_line_length;
-	float consumable_size = 0.02f;
+	float consumable_size = 1.0f / map_line_length / 2;
 
 	glm::vec2 player1_spawn = glm::vec2(0.0f,0.0f);
 	glm::vec2 player2_spawn = glm::vec2(0.0f,0.0f);
