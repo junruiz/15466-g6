@@ -356,18 +356,18 @@ void Game::load_map(){
 	std::string line;
 	std::string cur_text;
 
-	
-	int top = 16;
+
+	int top = 0;	
 	while (std::getline(infile, line)){
 		//assert(false);
 		//assert(line.length() == 16);
 		map_line_length = line.length();
 		block_size = 2.0f / map_line_length;
-		top--;
+		top++;
 		for (int i = 0; i < map_line_length; i++){
 			if (line[i] == 'X'){
 				float x = -1.0f + i * block_size;
-				float y = -1.0f + top * block_size;
+				float y = 1.0f - top * block_size;
 				glm::vec2 pos = glm::vec2(x,y);
 				MAP.blocks.push_back(Block{pos});
 				//assert(false);
