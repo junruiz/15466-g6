@@ -10,6 +10,9 @@
 
 #include <random>
 #include <array>
+#include <fstream>
+#include <sstream>
+#include <string>
 
 
 //Basic that meets game requirement 
@@ -184,7 +187,7 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 		lines.draw(glm::vec3(Game::ArenaMin.x, Game::ArenaMin.y, 0.0f), glm::vec3(Game::ArenaMin.x, Game::ArenaMax.y, 0.0f), glm::u8vec4(0xff, 0x00, 0xff, 0xff));
 		lines.draw(glm::vec3(Game::ArenaMax.x, Game::ArenaMin.y, 0.0f), glm::vec3(Game::ArenaMax.x, Game::ArenaMax.y, 0.0f), glm::u8vec4(0xff, 0x00, 0xff, 0xff));
 
-		for (auto const &block: game.blocks) {
+		for (auto const &block: game.MAP.blocks) {
 			float corner_xleft = block.left_down_corner.x;
 			float corner_xright = block.left_down_corner.x + game.block_size;
 			float corner_ybottom = block.left_down_corner.y;
@@ -221,10 +224,12 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 			draw_text(player.position + glm::vec2(0.0f, -0.1f + Game::PlayerRadius), player.name, 0.09f);
 
 			//drawing score draws at the topright corner for now
-			std::string inputString = std::to_string(0);
+			std::string inputString = std::to_string(player.survived_time);
 			glm::vec2 scorePos = glm::vec2(secoreBoardMin.x + 0.01f,secoreBoardMax.y-0.2f);
 			draw_text(scorePos, player.name +  ": "+ inputString, 0.09f);
 		}
 	}
 	GL_ERRORS();
 }
+
+

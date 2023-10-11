@@ -5,8 +5,13 @@
 #include <stdexcept>
 #include <iostream>
 #include <cstring>
+#include "data_path.hpp"
 
 #include <glm/gtx/norm.hpp>
+
+#include <fstream>
+#include <sstream>
+#include <string>
 
 void Player::Controls::send_controls_message(Connection *connection_) const {
 	assert(connection_);
@@ -75,6 +80,7 @@ bool Player::Controls::recv_controls_message(Connection *connection_) {
 //-----------------------------------------
 
 Game::Game() : mt(0x15466666) {
+	load_map();
 }
 
 Player *Game::spawn_player() {
@@ -144,7 +150,7 @@ void Game::update(float elapsed) {
 			p.velocity = dir * 1.0f;
 		}
 		p.position += p.velocity * elapsed;
-
+		p.survived_time =1.0f;
 		//reset 'downs' since controls have been handled:
 		p.controls.left.downs = 0;
 		p.controls.right.downs = 0;
@@ -189,7 +195,7 @@ void Game::update(float elapsed) {
 			// p1.velocity.y =-std::abs(p1.velocity.y);
 		}
 		//player/block collisions:
-		for (auto const &block : blocks) {
+		for (auto const &block :MAP.blocks) {
 			if (p1.position.x > block.left_down_corner.x - PlayerRadius && p1.position.x < block.left_down_corner.x + block_size + PlayerRadius
 			    && p1.position.y > block.left_down_corner.y - PlayerRadius && p1.position.y < block.left_down_corner.y + block_size + PlayerRadius) {
 				if (p1.velocity.x > 0) {
@@ -301,4 +307,32 @@ bool Game::recv_state_message(Connection *connection_) {
 	recv_buffer.erase(recv_buffer.begin(), recv_buffer.begin() + 4 + size);
 
 	return true;
+}
+
+void  Game:: load_map(){
+	std::ifstream infile(data_path("map.txt"));
+	std::string line;
+	std::string cur_text;
+
+	
+	int top = 16;
+	while (std::getline(infile, line)){
+		//assert(false);
+		//assert(line.length() == 16);
+		top--;
+		for (int i =0; i<16;i++){
+			if (line[i] == 'X'){
+				float x = i * block_size;
+				float y = top * block_size;
+				glm::vec2 pos = glm::vec2(x,y);
+				MAP.blocks.push_back(Block{pos});
+				//assert(false);
+				//std::cout << line[i];
+			}else{
+				//std::cout << "Hello World!";
+			}
+		}
+
+	}
+	//assert(false);
 }

@@ -44,12 +44,22 @@ struct Player {
 
 	glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
 	std::string name = "";
+
+	//Predaror 0
+	//Prey 1
+
+	int mode = 0;
+	float survived_time = 2.0f;
 	//Added player attribution
 	// uint16_t score = 0
 };
 
 struct Block {
 	glm::vec2 left_down_corner = glm::vec2(0.0f, 0.0f);
+};
+
+struct map{
+	std::list< Block > blocks = {};
 };
 
 struct Game {
@@ -75,7 +85,11 @@ struct Game {
 
 	//blockes:
 	std::list< Block > blocks = {Block{}};
+	map MAP = {};
 	float block_size = 0.2f;
+
+
+	
 
 	//player constants:
 	inline static constexpr float PlayerRadius = 0.06f;
@@ -94,4 +108,6 @@ struct Game {
 	//send game state.
 	//  Will move "connection_player" to the front of the front of the sent list.
 	void send_state_message(Connection *connection, Player *connection_player = nullptr) const;
+
+	void  Game:: load_map();
 };
