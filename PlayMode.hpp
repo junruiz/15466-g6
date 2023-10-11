@@ -32,6 +32,6 @@ struct PlayMode : Mode {
 	Client &client;
 
 
-	bool gameReady = false;
+	bool gameReady = true;
 
 };

@@ -88,8 +88,11 @@ Player *Game::spawn_player() {
 	Player &player = players.back();
 
 	//random point in the middle area of the arena:
-	player.position.x = glm::mix(ArenaMin.x + 2.0f * PlayerRadius, ArenaMax.x - 2.0f * PlayerRadius, 0.4f + 0.2f * mt() / float(mt.max()));
-	player.position.y = glm::mix(ArenaMin.y + 2.0f * PlayerRadius, ArenaMax.y - 2.0f * PlayerRadius, 0.4f + 0.2f * mt() / float(mt.max()));
+	if (players.size() == 1){
+		player.position= player1_spawn;
+	}else{
+		player.position= player2_spawn;
+	}
 
 	do {
 		player.color.r = mt() / float(mt.max());
@@ -121,6 +124,8 @@ void Game::update(float elapsed) {
 		time -= 1.0f;
 		seconds += 1;
 	}
+
+	
 
 	//position/velocity update:
 	for (auto &p : players) {
@@ -383,6 +388,10 @@ void Game::load_map(){
 				//std::cout << line[i];
 			}else if(line[i] == 'o'){
 				consumables.push_back(Consumable{glm::vec2(x + block_size/2,y+block_size/2), Consumable::small,glm::u8vec4(rand() % 255, rand() % 255, rand() % 255, 0xff),false});
+			}else if(line[i] == '1'){
+				player1_spawn = glm::vec2(x + block_size/2,y+block_size/2);
+			}else if(line[i] == '2'){
+				player2_spawn = glm::vec2(x + block_size/2,y+block_size/2);
 			}else{
 				//std::cout << "Hello World!";
 			}

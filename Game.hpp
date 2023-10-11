@@ -107,9 +107,10 @@ struct Game {
 	float block_size = 2.0f / map_line_length;
 	float consumable_size = block_size/8;
 
-
+	glm::vec2 player1_spawn = glm::vec2(0.0f,0.0f);
+	glm::vec2 player2_spawn = glm::vec2(0.0f,0.0f);
 	//player constants:
-	inline static constexpr float PlayerRadius = 0.06f;
+	inline static constexpr float PlayerRadius = 0.04f;
 	inline static constexpr float PlayerSpeed = 2.0f;
 	inline static constexpr float PlayerAccelHalflife = 0.25f;
 	
