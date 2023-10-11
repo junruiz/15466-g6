@@ -61,7 +61,6 @@ struct Block {
 struct map{
 	std::list< Block > blocks = {};
 };
-
 struct Consumable {
 	glm::vec2 center = glm::vec2(0.5f, 0.5f);
 	enum type {big, small} size = small;
@@ -92,13 +91,14 @@ struct Game {
 
 	//Consumables:
 	std::list< Consumable > consumables = {Consumable{}, 
-	Consumable{.center = glm::vec2(0.7f, 0.7f), .size = Consumable::big}, 
-	Consumable{.center = glm::vec2(-0.2f, -0.2f), .size = Consumable::big}};
-	float block_size = 0.2f;
+	Consumable{glm::vec2(0.7f, 0.7f),Consumable::big,glm::u8vec4(rand() % 255, rand() % 255, rand() % 255, 0xff),false}, 
+	Consumable{glm::vec2(-0.2f, -0.2f), Consumable::big,glm::u8vec4(rand() % 255, rand() % 255, rand() % 255, 0xff),false}};
 
 	//blockes:
 	std::list< Block > blocks = {Block{}};
+	map MAP = {};
 	float block_size = 0.2f;
+	float consumable_size = 0.02f;
 
 
 	
