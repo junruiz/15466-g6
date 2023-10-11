@@ -89,6 +89,10 @@ struct Game {
 	inline static constexpr glm::vec2 ArenaMin = glm::vec2(-1.0f, -1.0f);
 	inline static constexpr glm::vec2 ArenaMax = glm::vec2( 1.0f,  1.0f);
 
+	//time:
+	float time = 0;
+	uint8_t seconds = 0;
+
 	//Consumables:
 	std::list< Consumable > consumables = {Consumable{glm::vec2(0.3f, 0.3f)}, 
 	Consumable{glm::vec2(0.7f, 0.7f),Consumable::big,glm::u8vec4(rand() % 255, rand() % 255, rand() % 255, 0xff),false}, 

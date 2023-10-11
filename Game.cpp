@@ -116,6 +116,12 @@ void Game::remove_player(Player *player) {
 }
 
 void Game::update(float elapsed) {
+	time += elapsed;
+	if (time > 1.0f) {
+		time -= 1.0f;
+		seconds += 1;
+	}
+
 	//position/velocity update:
 	for (auto &p : players) {
 		glm::vec2 dir = glm::vec2(0.0f, 0.0f);
@@ -150,7 +156,6 @@ void Game::update(float elapsed) {
 			p.velocity = dir * 1.0f;
 		}
 		p.position += p.velocity * elapsed;
-		p.survived_time =1.0f;
 		//reset 'downs' since controls have been handled:
 		p.controls.left.downs = 0;
 		p.controls.right.downs = 0;
@@ -280,6 +285,8 @@ void Game::send_state_message(Connection *connection_, Player *connection_player
 		send_consumable(consumable);
 	}
 
+	connection.send(seconds);
+
 	//compute the message size and patch into the message header:
 	uint32_t size = uint32_t(connection.send_buffer.size() - mark);
 	connection.send_buffer[mark-3] = uint8_t(size);
@@ -343,6 +350,8 @@ bool Game::recv_state_message(Connection *connection_) {
 		read(&consumable.consumed);
 	}
 
+	read(&seconds);
+	
 	if (at != size) throw std::runtime_error("Trailing data in state message.");
 
 	//delete message from buffer:
