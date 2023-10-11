@@ -22,9 +22,9 @@
 //2. Scoreboard two players updating Chen
 //3. Player mode-switching predator vs prey Chen
 //4. Different player should appear differently Chen
-//5. Player-player collision Zhao
+//5. Player-player collision Zhao 
 //6. Time (猎杀时间) Zhao
-//7. Player-object collision consumption Zhao 
+//7. Player-object collision consumption Zhao (done)
 //8. Spawn consumable (After I've down map)
 //9. different consumable should appear differently Note: diffirent color solid circle Zhao 
 
@@ -255,6 +255,10 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 			std::string inputString = std::to_string(player.score);
 			glm::vec2 scorePos = glm::vec2(scoreBoardMin.x + 0.01f,scoreBoardMax.y-0.2f);
 			draw_text(scorePos, player.name +  ": "+ inputString, 0.09f);
+
+			std::string timeString = std::to_string(game.seconds);
+			glm::vec2 timePos = glm::vec2(scoreBoardMin.x + 0.01f,scoreBoardMax.y-0.5f);
+			draw_text(timePos, "time: "+ timeString + "s", 0.09f);
 		}
 	}
 	GL_ERRORS();
