@@ -99,9 +99,9 @@ struct Game {
 	int predator = 1;
 
 	//Consumables:
-	std::list< Consumable > consumables = {Consumable{glm::vec2(0.3f, 0.3f)}, 
-	Consumable{glm::vec2(0.7f, 0.7f),Consumable::big,glm::u8vec4(rand() % 255, rand() % 255, rand() % 255, 0xff),false}, 
-	Consumable{glm::vec2(-0.5f, -0.5f), Consumable::big,glm::u8vec4(rand() % 255, rand() % 255, rand() % 255, 0xff),false}};
+	std::list< Consumable > consumables = {};
+
+	
 
 	//blockes:
 	std::list< Block > blocks = {Block{}};

@@ -16,16 +16,8 @@
 #include <cstdlib>
 
 
-//Basic that meets game requirement 
-// Only 2 person, raise error if third join Chen
-//1. Loading text into map  Chen 
-//2. Scoreboard two players updating Chen
-//3. Player mode-switching predator vs prey Zhao
+
 //4. Different player should appear differently Chen
-//5. Player-player collision Zhao 
-//6. Time (猎杀时间) Zhao
-//7. Player-object collision consumption Zhao (done)
-//8. Spawn consumable (After I've down map)
 //9. different consumable should appear differently Note: diffirent color solid circle Zhao 
 
 
@@ -154,6 +146,8 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 		2.0f * aspect / (Game::ArenaMax.x - Game::ArenaMin.x + 2.0f * Game::PlayerRadius),
 		2.0f / (Game::ArenaMax.y - Game::ArenaMin.y + 2.0f * Game::PlayerRadius)
 	);
+	float sum = 0.0f;
+	float scoreBoard = 0.2f;
 	glm::vec2 offset = -0.5f * (Game::ArenaMax + Game::ArenaMin);
 
 	glm::mat4 world_to_clip = glm::mat4(
@@ -257,12 +251,13 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 
 			//drawing score draws at the topright corner for now
 			std::string inputString = std::to_string(player.score);
-			glm::vec2 scorePos = glm::vec2(scoreBoardMin.x + 0.01f,scoreBoardMax.y-0.2f);
+			glm::vec2 scorePos = glm::vec2(scoreBoardMin.x + 0.01f,scoreBoardMax.y-0.2f-sum);
 			draw_text(scorePos, player.name +  ": "+ inputString, 0.09f);
 
 			std::string timeString = std::to_string(game.seconds);
-			glm::vec2 timePos = glm::vec2(scoreBoardMin.x + 0.01f,scoreBoardMax.y-0.5f);
+			glm::vec2 timePos = glm::vec2(scoreBoardMin.x + 0.01f,scoreBoardMax.y-0.5f-sum);
 			draw_text(timePos, "time: "+ timeString + "s", 0.09f);
+			sum+=scoreBoard;
 		}
 	}
 	GL_ERRORS();
