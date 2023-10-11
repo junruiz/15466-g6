@@ -31,4 +31,7 @@ struct PlayMode : Mode {
 	//connection to server:
 	Client &client;
 
+
+	bool gameReady = true;
+
 };

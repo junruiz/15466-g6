@@ -92,7 +92,10 @@ bool PlayMode::handle_event(SDL_Event const &evt, glm::uvec2 const &window_size)
 void PlayMode::update(float elapsed) {
 
 	//queue data for sending to server:
-	controls.send_controls_message(&client.connection);
+	if (gameReady){
+		controls.send_controls_message(&client.connection);
+	}
+	
 
 	//reset button press counters:
 
@@ -124,6 +127,10 @@ void PlayMode::update(float elapsed) {
 			}
 		}
 	}, 0.0);
+
+	if (game.players.size() >=2){
+		gameReady = true;
+	}
 }
 
 void PlayMode::draw(glm::uvec2 const &drawable_size) {

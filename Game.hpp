@@ -112,8 +112,9 @@ struct Game {
 	float block_size = 2.0f / map_line_length;
 	float consumable_size = 0.02f;
 
+
 	//player constants:
-	inline static constexpr float PlayerRadius = 0.06f;
+	inline static constexpr float PlayerRadius = 0.04f;
 	inline static constexpr float PlayerSpeed = 2.0f;
 	inline static constexpr float PlayerAccelHalflife = 0.25f;
 	
