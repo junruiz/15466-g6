@@ -45,11 +45,12 @@ struct Player {
 	glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
 	std::string name = "";
 
-	//Predaror 0
-	//Prey 1
+	//Invincible 0 cannot touch consumable, cannot eat others/be eaten
+	//Predator 1 can touch consumable, can eat others
+	//Prey 2 can touch consumable, can be eaten
 
 	int mode = 0;
-	float survived_time = 2.0f;
+	float death_time = 0;
 	//Added player attribution
 	uint16_t score = 0;
 };
@@ -92,6 +93,10 @@ struct Game {
 	//time:
 	float time = 0;
 	uint8_t seconds = 0;
+	float change_predator_time = 0;
+
+	//set predator:
+	int predator = 1;
 
 	//Consumables:
 	std::list< Consumable > consumables = {Consumable{glm::vec2(0.3f, 0.3f)}, 
@@ -106,7 +111,6 @@ struct Game {
 	int map_line_length = 16;
 	float block_size = 2.0f / map_line_length;
 	float consumable_size = 0.02f;
-
 
 	//player constants:
 	inline static constexpr float PlayerRadius = 0.06f;
