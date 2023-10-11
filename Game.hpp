@@ -101,7 +101,7 @@ struct Game {
 	//default length 16
 	int map_line_length = 16;
 	float block_size = 2.0f / map_line_length;
-	float consumable_size = 0.02f;
+	float consumable_size = block_size/8;
 
 
 	//player constants:

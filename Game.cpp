@@ -215,7 +215,7 @@ void Game::update(float elapsed) {
 			}
 		}
 
-		for (auto &consumable : consumables) {
+		for (auto &consumable :consumables) {
 			glm::vec2 p1c = p1.position - consumable.center;
 			float len2 = glm::length2(p1c);
 			float touch_dist = consumable_size + PlayerRadius;
@@ -365,13 +365,15 @@ void Game::load_map(){
 		block_size = 2.0f / map_line_length;
 		top++;
 		for (int i = 0; i < map_line_length; i++){
+			float x = -1.0f + i * block_size;
+			float y = 1.0f - top * block_size;
 			if (line[i] == 'X'){
-				float x = -1.0f + i * block_size;
-				float y = 1.0f - top * block_size;
 				glm::vec2 pos = glm::vec2(x,y);
 				MAP.blocks.push_back(Block{pos});
 				//assert(false);
 				//std::cout << line[i];
+			}else if(line[i] == 'o'){
+				consumables.push_back(Consumable{glm::vec2(x + block_size/2,y+block_size/2), Consumable::small,glm::u8vec4(rand() % 255, rand() % 255, rand() % 255, 0xff),false});
 			}else{
 				//std::cout << "Hello World!";
 			}
