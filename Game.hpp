@@ -97,7 +97,10 @@ struct Game {
 	//blockes:
 	std::list< Block > blocks = {Block{}};
 	map MAP = {};
-	float block_size = 0.2f;
+	
+	//default length 16
+	int map_line_length = 16;
+	float block_size = 2.0f / map_line_length;
 	float consumable_size = 0.02f;
 
 

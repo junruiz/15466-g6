@@ -245,7 +245,7 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 			draw_text(player.position + glm::vec2(0.0f, -0.1f + Game::PlayerRadius), player.name, 0.09f);
 
 			//drawing score draws at the topright corner for now
-			std::string inputString = std::to_string(player.survived_time);
+			std::string inputString = std::to_string(player.score);
 			glm::vec2 scorePos = glm::vec2(scoreBoardMin.x + 0.01f,scoreBoardMax.y-0.2f);
 			draw_text(scorePos, player.name +  ": "+ inputString, 0.09f);
 		}

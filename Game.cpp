@@ -219,12 +219,14 @@ void Game::update(float elapsed) {
 			glm::vec2 p1c = p1.position - consumable.center;
 			float len2 = glm::length2(p1c);
 			float touch_dist = consumable_size + PlayerRadius;
+			uint16_t cons_score = 1;
 			if (consumable.size == Consumable::big) {
 				// big consumable
 				touch_dist = 2 * consumable_size + PlayerRadius;
+				cons_score = 2;
 			} 
 			if (consumable.consumed == false && len2 < touch_dist * touch_dist) {
-				p1.score ++;
+				p1.score += cons_score;
 				consumable.consumed = true;
 			}
 		}
@@ -249,6 +251,7 @@ void Game::send_state_message(Connection *connection_, Player *connection_player
 		connection.send(player.position);
 		connection.send(player.velocity);
 		connection.send(player.color);
+		connection.send(player.score);
 	
 		//NOTE: can't just 'send(name)' because player.name is not plain-old-data type.
 		//effectively: truncates player name to 255 chars
@@ -316,6 +319,7 @@ bool Game::recv_state_message(Connection *connection_) {
 		read(&player.position);
 		read(&player.velocity);
 		read(&player.color);
+		read(&player.score);
 		uint8_t name_len;
 		read(&name_len);
 		//n.b. would probably be more efficient to directly copy from recv_buffer, but I think this is clearer:
@@ -357,11 +361,13 @@ void Game::load_map(){
 	while (std::getline(infile, line)){
 		//assert(false);
 		//assert(line.length() == 16);
+		map_line_length = line.length();
+		block_size = 2.0f / map_line_length;
 		top--;
-		for (int i =0; i<16;i++){
+		for (int i = 0; i < map_line_length; i++){
 			if (line[i] == 'X'){
-				float x = i * block_size;
-				float y = top * block_size;
+				float x = -1.0f + i * block_size;
+				float y = -1.0f + top * block_size;
 				glm::vec2 pos = glm::vec2(x,y);
 				MAP.blocks.push_back(Block{pos});
 				//assert(false);
