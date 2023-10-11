@@ -370,7 +370,7 @@ void Game::load_map(){
 	while (std::getline(infile, line)){
 		//assert(false);
 		//assert(line.length() == 16);
-		map_line_length = line.length();
+		map_line_length = (int)line.length();
 		block_size = 2.0f / map_line_length;
 		top++;
 		for (int i = 0; i < map_line_length; i++){
