@@ -62,7 +62,7 @@ struct map{
 	std::list< Block > blocks = {};
 };
 struct Consumable {
-	glm::vec2 center = glm::vec2(0.5f, 0.5f);
+	glm::vec2 center = glm::vec2(0, 0);
 	enum type {big, small} size = small;
 	glm::u8vec4 color = glm::u8vec4(rand() % 255, rand() % 255, rand() % 255, 0xff);
 	bool consumed = false;
@@ -90,9 +90,9 @@ struct Game {
 	inline static constexpr glm::vec2 ArenaMax = glm::vec2( 1.0f,  1.0f);
 
 	//Consumables:
-	std::list< Consumable > consumables = {Consumable{}, 
+	std::list< Consumable > consumables = {Consumable{glm::vec2(0.3f, 0.3f)}, 
 	Consumable{glm::vec2(0.7f, 0.7f),Consumable::big,glm::u8vec4(rand() % 255, rand() % 255, rand() % 255, 0xff),false}, 
-	Consumable{glm::vec2(-0.2f, -0.2f), Consumable::big,glm::u8vec4(rand() % 255, rand() % 255, rand() % 255, 0xff),false}};
+	Consumable{glm::vec2(-0.5f, -0.5f), Consumable::big,glm::u8vec4(rand() % 255, rand() % 255, rand() % 255, 0xff),false}};
 
 	//blockes:
 	std::list< Block > blocks = {Block{}};
@@ -100,8 +100,6 @@ struct Game {
 	float block_size = 0.2f;
 	float consumable_size = 0.02f;
 
-
-	
 
 	//player constants:
 	inline static constexpr float PlayerRadius = 0.06f;
@@ -121,5 +119,5 @@ struct Game {
 	//  Will move "connection_player" to the front of the front of the sent list.
 	void send_state_message(Connection *connection, Player *connection_player = nullptr) const;
 
-	void  Game:: load_map();
+	void load_map();
 };

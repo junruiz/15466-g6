@@ -173,14 +173,13 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 		};
 
 
-		glm::vec2 secoreBoardMin = glm::vec2((float)Game::ArenaMax.x + 0.01f, (float)Game::ArenaMin.y);
-		glm::vec2 secoreBoardMax = glm::vec2((float)Game::ArenaMax.x + 0.5f, (float)Game::ArenaMax.y);
+		glm::vec2 scoreBoardMin = glm::vec2((float)Game::ArenaMax.x + 0.01f, (float)Game::ArenaMin.y);
+		glm::vec2 scoreBoardMax = glm::vec2((float)Game::ArenaMax.x + 0.5f, (float)Game::ArenaMax.y);
 
-		lines.draw(glm::vec3(secoreBoardMin.x, secoreBoardMin.y, 0.0f), glm::vec3(secoreBoardMax.x, secoreBoardMin.y, 0.0f), glm::u8vec4(0xff, 0x00, 0xff, 0xff));
-		lines.draw(glm::vec3(secoreBoardMin.x, secoreBoardMax.y, 0.0f), glm::vec3(secoreBoardMax.x, secoreBoardMax.y, 0.0f), glm::u8vec4(0xff, 0x00, 0xff, 0xff));
-		lines.draw(glm::vec3(secoreBoardMin.x, secoreBoardMin.y, 0.0f), glm::vec3(secoreBoardMin.x, secoreBoardMax.y, 0.0f), glm::u8vec4(0xff, 0x00, 0xff, 0xff));
-		lines.draw(glm::vec3(secoreBoardMax.x, secoreBoardMin.y, 0.0f), glm::vec3(secoreBoardMax.x, secoreBoardMax.y, 0.0f), glm::u8vec4(0xff, 0x00, 0xff, 0xff));
-
+		lines.draw(glm::vec3(scoreBoardMin.x, scoreBoardMin.y, 0.0f), glm::vec3(scoreBoardMax.x, scoreBoardMin.y, 0.0f), glm::u8vec4(0xff, 0x00, 0xff, 0xff));
+		lines.draw(glm::vec3(scoreBoardMin.x, scoreBoardMax.y, 0.0f), glm::vec3(scoreBoardMax.x, scoreBoardMax.y, 0.0f), glm::u8vec4(0xff, 0x00, 0xff, 0xff));
+		lines.draw(glm::vec3(scoreBoardMin.x, scoreBoardMin.y, 0.0f), glm::vec3(scoreBoardMin.x, scoreBoardMax.y, 0.0f), glm::u8vec4(0xff, 0x00, 0xff, 0xff));
+		lines.draw(glm::vec3(scoreBoardMax.x, scoreBoardMin.y, 0.0f), glm::vec3(scoreBoardMax.x, scoreBoardMax.y, 0.0f), glm::u8vec4(0xff, 0x00, 0xff, 0xff));
 
 		//float moveX = -100.0f;
 		lines.draw(glm::vec3(Game::ArenaMin.x, Game::ArenaMin.y, 0.0f), glm::vec3(Game::ArenaMax.x, Game::ArenaMin.y, 0.0f), glm::u8vec4(0xff, 0x00, 0xff, 0xff));
@@ -247,7 +246,7 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 
 			//drawing score draws at the topright corner for now
 			std::string inputString = std::to_string(player.survived_time);
-			glm::vec2 scorePos = glm::vec2(secoreBoardMin.x + 0.01f,secoreBoardMax.y-0.2f);
+			glm::vec2 scorePos = glm::vec2(scoreBoardMin.x + 0.01f,scoreBoardMax.y-0.2f);
 			draw_text(scorePos, player.name +  ": "+ inputString, 0.09f);
 		}
 	}

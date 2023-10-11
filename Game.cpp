@@ -216,8 +216,14 @@ void Game::update(float elapsed) {
 		}
 
 		for (auto &consumable : consumables) {
-			if (sqrt(p1.position.x - consumable.center.x) + sqrt(p1.position.y - consumable.center.y) 
-			    <= sqrt(consumable_size + PlayerRadius) && consumable.consumed == false) {
+			glm::vec2 p1c = p1.position - consumable.center;
+			float len2 = glm::length2(p1c);
+			float touch_dist = consumable_size + PlayerRadius;
+			if (consumable.size == Consumable::big) {
+				// big consumable
+				touch_dist = 2 * consumable_size + PlayerRadius;
+			} 
+			if (consumable.consumed == false && len2 < touch_dist * touch_dist) {
 				p1.score ++;
 				consumable.consumed = true;
 			}
@@ -321,6 +327,7 @@ bool Game::recv_state_message(Connection *connection_) {
 		}
 	}
 
+	consumables.clear();
 	uint8_t consumable_count;
 	read(&consumable_count);
 	for (uint8_t i = 0; i < consumable_count; ++i) {
@@ -340,7 +347,7 @@ bool Game::recv_state_message(Connection *connection_) {
 	return true;
 }
 
-void  Game:: load_map(){
+void Game::load_map(){
 	std::ifstream infile(data_path("map.txt"));
 	std::string line;
 	std::string cur_text;
