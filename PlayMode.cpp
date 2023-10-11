@@ -20,7 +20,7 @@
 // Only 2 person, raise error if third join Chen
 //1. Loading text into map  Chen 
 //2. Scoreboard two players updating Chen
-//3. Player mode-switching predator vs prey Chen
+//3. Player mode-switching predator vs prey Zhao
 //4. Different player should appear differently Chen
 //5. Player-player collision Zhao 
 //6. Time (猎杀时间) Zhao
@@ -253,6 +253,7 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 			}
 
 			draw_text(player.position + glm::vec2(0.0f, -0.1f + Game::PlayerRadius), player.name, 0.09f);
+			draw_text(player.position + glm::vec2(0.0f, 0.1f + Game::PlayerRadius), std::to_string(player.mode), 0.09f);
 
 			//drawing score draws at the topright corner for now
 			std::string inputString = std::to_string(player.score);

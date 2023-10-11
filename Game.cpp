@@ -120,6 +120,46 @@ void Game::remove_player(Player *player) {
 
 void Game::update(float elapsed) {
 	time += elapsed;
+
+	change_predator_time += elapsed;
+	if (change_predator_time >= 15.0f) {
+		//change_predator
+		if (predator == 1) {
+			predator = 2;
+		}
+		else if (predator == 2) {
+			predator = 1;
+		}
+		change_predator_time -= 15.0f;
+	}
+
+	int player_idx = 0;
+	for (auto &p : players) {
+		player_idx ++;
+		if (p.mode == 0) {
+			p.death_time += elapsed;
+			if (p.death_time > 5.0f) {
+				if (predator != player_idx) {
+					p.mode = 2;
+				}
+				else if (predator == player_idx) {
+					p.mode = 1;
+				}
+				p.death_time = 0;
+			}
+		}
+		if (p.mode == 1) {
+			if (predator != player_idx) {
+				p.mode = 2;
+			}
+		}
+		if (p.mode == 2) {
+			if (predator == player_idx) {
+				p.mode = 1;
+			}
+		}
+	}
+
 	if (time > 1.0f) {
 		time -= 1.0f;
 		seconds += 1;
@@ -174,12 +214,24 @@ void Game::update(float elapsed) {
 		//player/player collisions:
 		for (auto &p2 : players) {
 			if (&p1 == &p2) break;
-			// update this to be "eat"
 
-			// glm::vec2 p12 = p2.position - p1.position;
-			// float len2 = glm::length2(p12);
-			// if (len2 > (2.0f * PlayerRadius) * (2.0f * PlayerRadius)) continue;
+			glm::vec2 p12 = p2.position - p1.position;
+			float len2 = glm::length2(p12);
+			if (len2 > (2.0f * PlayerRadius) * (2.0f * PlayerRadius)) continue;
 			// if (len2 == 0.0f) continue;
+
+			if (p1.mode == 1 && p2.mode == 2) {
+				p1.score += 5;
+				p2.mode = 0;
+				p2.death_time = 0;
+			}
+
+			if (p1.mode == 2 && p2.mode == 1) {
+				p2.score += 5;
+				p1.mode = 0;
+				p1.death_time = 0;
+			}
+
 			// glm::vec2 dir = p12 / std::sqrt(len2);
 			// //mirror velocity to be in separating direction:
 			// glm::vec2 v12 = p2.velocity - p1.velocity;
@@ -235,7 +287,7 @@ void Game::update(float elapsed) {
 				touch_dist = 2 * consumable_size + PlayerRadius;
 				cons_score = 2;
 			} 
-			if (consumable.consumed == false && len2 < touch_dist * touch_dist) {
+			if (p1.mode != 0 && consumable.consumed == false && len2 < touch_dist * touch_dist) {
 				p1.score += cons_score;
 				consumable.consumed = true;
 			}
@@ -262,6 +314,7 @@ void Game::send_state_message(Connection *connection_, Player *connection_player
 		connection.send(player.velocity);
 		connection.send(player.color);
 		connection.send(player.score);
+		connection.send(player.mode);
 	
 		//NOTE: can't just 'send(name)' because player.name is not plain-old-data type.
 		//effectively: truncates player name to 255 chars
@@ -332,6 +385,7 @@ bool Game::recv_state_message(Connection *connection_) {
 		read(&player.velocity);
 		read(&player.color);
 		read(&player.score);
+		read(&player.mode);
 		uint8_t name_len;
 		read(&name_len);
 		//n.b. would probably be more efficient to directly copy from recv_buffer, but I think this is clearer:
@@ -356,7 +410,7 @@ bool Game::recv_state_message(Connection *connection_) {
 	}
 
 	read(&seconds);
-	
+
 	if (at != size) throw std::runtime_error("Trailing data in state message.");
 
 	//delete message from buffer:
