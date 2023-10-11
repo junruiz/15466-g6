@@ -208,6 +208,14 @@ void Game::update(float elapsed) {
 				p1.velocity.y = 0;
 			}
 		}
+
+		for (auto &consumable : consumables) {
+			if (sqrt(p1.position.x - consumable.center.x) + sqrt(p1.position.y - consumable.center.y) 
+			    <= sqrt(consumable_size + PlayerRadius) && consumable.consumed == false) {
+				p1.score ++;
+				consumable.consumed = true;
+			}
+		}
 	}
 }
 
@@ -243,6 +251,18 @@ void Game::send_state_message(Connection *connection_, Player *connection_player
 	for (auto const &player : players) {
 		if (&player == connection_player) continue;
 		send_player(player);
+	}
+
+	auto send_consumable = [&](Consumable const &consumable) {
+		connection.send(consumable.center);
+		connection.send(consumable.size);
+		connection.send(consumable.color);
+		connection.send(uint8_t(consumable.consumed));
+	};
+
+	connection.send(uint8_t(consumables.size()));
+	for (auto const &consumable : consumables) {
+		send_consumable(consumable);
 	}
 
 	//compute the message size and patch into the message header:
@@ -293,6 +313,17 @@ bool Game::recv_state_message(Connection *connection_) {
 			read(&c);
 			player.name += c;
 		}
+	}
+
+	uint8_t consumable_count;
+	read(&consumable_count);
+	for (uint8_t i = 0; i < consumable_count; ++i) {
+		consumables.emplace_back();
+		Consumable &consumable = consumables.back();
+		read(&consumable.center);
+		read(&consumable.size);
+		read(&consumable.color);
+		read(&consumable.consumed);
 	}
 
 	if (at != size) throw std::runtime_error("Trailing data in state message.");

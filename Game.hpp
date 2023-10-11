@@ -45,11 +45,18 @@ struct Player {
 	glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
 	std::string name = "";
 	//Added player attribution
-	// uint16_t score = 0
+	uint16_t score = 0;
 };
 
 struct Block {
 	glm::vec2 left_down_corner = glm::vec2(0.0f, 0.0f);
+};
+
+struct Consumable {
+	glm::vec2 center = glm::vec2(0.5f, 0.5f);
+	enum type {big, small} size = small;
+	glm::u8vec4 color = glm::u8vec4(rand() % 255, rand() % 255, rand() % 255, 0xff);
+	bool consumed = false;
 };
 
 struct Game {
@@ -73,9 +80,15 @@ struct Game {
 	inline static constexpr glm::vec2 ArenaMin = glm::vec2(-1.0f, -1.0f);
 	inline static constexpr glm::vec2 ArenaMax = glm::vec2( 1.0f,  1.0f);
 
+	//Consumables:
+	std::list< Consumable > consumables = {Consumable{}, 
+	Consumable{.center = glm::vec2(0.7f, 0.7f), .size = Consumable::big}, 
+	Consumable{.center = glm::vec2(-0.2f, -0.2f), .size = Consumable::big}};
+	float block_size = 0.2f;
+
 	//blockes:
 	std::list< Block > blocks = {Block{}};
-	float block_size = 0.2f;
+	float consumable_size = 0.02f;
 
 	//player constants:
 	inline static constexpr float PlayerRadius = 0.06f;

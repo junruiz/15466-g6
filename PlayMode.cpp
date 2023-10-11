@@ -10,6 +10,7 @@
 
 #include <random>
 #include <array>
+#include <cstdlib>
 
 
 //Basic that meets game requirement 
@@ -193,6 +194,27 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 			lines.draw(glm::vec3(corner_xleft, corner_ytop, 0.0f), glm::vec3(corner_xright, corner_ytop, 0.0f), glm::u8vec4(0xff, 0xff, 0x00, 0xff));
 			lines.draw(glm::vec3(corner_xleft, corner_ybottom, 0.0f), glm::vec3(corner_xleft, corner_ytop, 0.0f), glm::u8vec4(0xff, 0xff, 0x00, 0xff));
 			lines.draw(glm::vec3(corner_xright, corner_ybottom, 0.0f), glm::vec3(corner_xright, corner_ytop, 0.0f), glm::u8vec4(0xff, 0xff, 0x00, 0xff));
+		}
+
+		for (auto const &consumable: game.consumables) {
+			float cons_size = game.consumable_size;
+			glm::u8vec4 col = glm::u8vec4(0xff, 0xff, 0, 0xff);
+			if (consumable.size == Consumable::big) {
+				// big type
+				cons_size *= 2;
+				col = consumable.color;
+			}
+
+			// std::cout << consumable.consumed << "\n";
+			if (!consumable.consumed) {
+				for (uint32_t a = 0; a < circle.size(); ++a) {
+					lines.draw(
+						glm::vec3(consumable.center + cons_size * circle[a], 0.0f),
+						glm::vec3(consumable.center + cons_size * circle[(a+1)%circle.size()], 0.0f),
+						col
+					);
+				}
+			}
 		}
 
 		for (auto const &player : game.players) {
