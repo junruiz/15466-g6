@@ -4,6 +4,7 @@
 #include "gl_errors.hpp"
 #include "data_path.hpp"
 #include "hex_dump.hpp"
+#include "load_save_png.hpp"
 
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/string_cast.hpp>
@@ -196,6 +197,7 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 			float corner_xright = block.left_down_corner.x + game.block_size;
 			float corner_ybottom = block.left_down_corner.y;
 			float corner_ytop = block.left_down_corner.y + game.block_size;
+			
 			lines.draw(glm::vec3(corner_xleft, corner_ybottom, 0.0f), glm::vec3(corner_xright, corner_ybottom, 0.0f), glm::u8vec4(0xff, 0xff, 0x00, 0xff));
 			lines.draw(glm::vec3(corner_xleft, corner_ytop, 0.0f), glm::vec3(corner_xright, corner_ytop, 0.0f), glm::u8vec4(0xff, 0xff, 0x00, 0xff));
 			lines.draw(glm::vec3(corner_xleft, corner_ybottom, 0.0f), glm::vec3(corner_xleft, corner_ytop, 0.0f), glm::u8vec4(0xff, 0xff, 0x00, 0xff));

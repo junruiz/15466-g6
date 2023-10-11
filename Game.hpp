@@ -100,17 +100,20 @@ struct Game {
 
 	//Consumables:
 	std::list< Consumable > consumables = {};
+<<<<<<< HEAD
 
 	
+=======
+>>>>>>> 7f16859f572a64609f56cee2492ab445aa31bf42
 
 	//blockes:
-	std::list< Block > blocks = {Block{}};
+	std::list< Block > blocks = {};
 	map MAP = {};
 	
 	//default length 16
 	int map_line_length = 16;
 	float block_size = 2.0f / map_line_length;
-	float consumable_size = 0.02f;
+	float consumable_size = 1.0f / map_line_length / 2;
 
 	glm::vec2 player1_spawn = glm::vec2(0.0f,0.0f);
 	glm::vec2 player2_spawn = glm::vec2(0.0f,0.0f);

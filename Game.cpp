@@ -198,7 +198,7 @@ void Game::update(float elapsed) {
 			// perp = glm::mix(perp, 0.0f, amt);
 
 			// p.velocity = dir * along + glm::vec2(-dir.y, dir.x) * perp;
-			p.velocity = dir * 1.0f;
+			p.velocity = dir * 0.5f;
 		}
 		p.position += p.velocity * elapsed;
 		//reset 'downs' since controls have been handled:
@@ -431,6 +431,7 @@ void Game::load_map(){
 		//assert(line.length() == 16);
 		map_line_length = (int)line.length();
 		block_size = 2.0f / map_line_length;
+		consumable_size = 1.0f / map_line_length / 2;
 		top++;
 		for (int i = 0; i < map_line_length; i++){
 			float x = -1.0f + i * block_size;
@@ -441,13 +442,13 @@ void Game::load_map(){
 				//assert(false);
 				//std::cout << line[i];
 			}else if(line[i] == 'o'){
-				consumables.push_back(Consumable{glm::vec2(x + block_size/2,y+block_size/2), Consumable::small,glm::u8vec4(rand() % 255, rand() % 255, rand() % 255, 0xff),false});
+				consumables.push_back(Consumable{glm::vec2(x + block_size/2,y+block_size/2), Consumable::big,glm::u8vec4(rand() % 255, rand() % 255, rand() % 255, 0xff),false});
 			}else if(line[i] == '1'){
 				player1_spawn = glm::vec2(x + block_size/2,y+block_size/2);
 			}else if(line[i] == '2'){
 				player2_spawn = glm::vec2(x + block_size/2,y+block_size/2);
-			}else{
-				//std::cout << "Hello World!";
+			}else if(line[i] == '.'){
+				consumables.push_back(Consumable{glm::vec2(x + block_size/2,y+block_size/2), Consumable::small,glm::u8vec4(rand() % 255, rand() % 255, rand() % 255, 0xff),false});
 			}
 		}
 
