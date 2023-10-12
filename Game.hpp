@@ -45,9 +45,10 @@ struct Player {
 	glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
 	std::string name = "";
 
-	//Invincible 0 cannot touch consumable, cannot eat others/be eaten
-	//Predator 1 can touch consumable, can eat others
+	//Not Ready 0 cannot touch consumable, cannot eat others/be eaten
+	//Predator 1 cannot touch consumable, can eat others
 	//Prey 2 can touch consumable, can be eaten
+	//Invincible 3 cannot touch consumable, cannot eat others/be eaten
 
 	int mode = 0;
 	float death_time = 0;
@@ -105,11 +106,10 @@ struct Game {
 
 	//set predator:
 	int predator = 1;
+	std::string predator_name = "Player 1";
 
 	//Consumables:
 	std::list< Consumable > consumables = {};
-
-	
 
 	//blockes:
 	std::list< Block > blocks = {};

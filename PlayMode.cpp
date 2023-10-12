@@ -173,7 +173,7 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 		};
 
 		glm::vec2 scoreBoardMin = glm::vec2((float)Game::ArenaMax.x + 0.01f, (float)Game::ArenaMin.y);
-		glm::vec2 scoreBoardMax = glm::vec2((float)Game::ArenaMax.x + 0.5f, (float)Game::ArenaMax.y);
+		glm::vec2 scoreBoardMax = glm::vec2((float)Game::ArenaMax.x + 0.8f, (float)Game::ArenaMax.y);
 
 		lines.draw(glm::vec3(scoreBoardMin.x, scoreBoardMin.y, 0.0f), glm::vec3(scoreBoardMax.x, scoreBoardMin.y, 0.0f), glm::u8vec4(0xff, 0x00, 0xff, 0xff));
 		lines.draw(glm::vec3(scoreBoardMin.x, scoreBoardMax.y, 0.0f), glm::vec3(scoreBoardMax.x, scoreBoardMax.y, 0.0f), glm::u8vec4(0xff, 0x00, 0xff, 0xff));
@@ -234,7 +234,7 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 				p2name = player.name;
 			}
 			glm::u8vec4 col = glm::u8vec4(player.color.x*255, player.color.y*255, player.color.z*255, 0xff);
-			if (player.mode == 0) {
+			if (player.mode == 0 || player.mode == 3) {
 				col = glm::u8vec4(rand()%255, rand()%255, rand()%255, 0xff);
 			}
 			if (&player == &game.players.front()) {
@@ -260,7 +260,7 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 
 			draw_text(player.position + glm::vec2(0.0f, -0.1f + Game::PlayerRadius), player.name, 0.09f);
 
-			if (player.mode == 1){
+			if (game.mode == 2 && player.name == game.predator_name){
 				draw_fork(player.position + glm::vec2(0.05f,-0.05f),0.1f,0.1f/5);
 			}
 
@@ -270,18 +270,17 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 			draw_text(scorePos, player.name +  ": "+ inputString, 0.09f);
 
 			glm::vec2 predatorPos = glm::vec2(scoreBoardMin.x + 0.01f,scoreBoardMax.y-sum-1.0f);
-			if (player.mode == 1) {
-				draw_text(predatorPos, "Now the Predator is " + player.name, 0.05f);
+			if (game.mode == 2 && game.predator_name == player.name) {
+				draw_text(predatorPos, "Predator: " + player.name, 0.09f);
 			}
-
 		}
 		std::string timeString = "";
-		std::string winnerString = p1score > p2score ? "Game End! Winner is " + p1name : 
-				 	   			   p2score > p1score ? "Game End! Winner is " + p2name : "Draw";
+		std::string winnerString = p1score > p2score ? "Winner is " + p1name : 
+				 	   			   p2score > p1score ? "Winner is " + p2name : "Draw";
 		
 		glm::vec2 timePos = glm::vec2(scoreBoardMin.x + 0.01f,scoreBoardMax.y-sum-0.2f);
 		if (game.mode == 0) {
-			timeString = "Waiting for another player";
+			timeString = "Waiting for opponent";
 		}
  		if (game.mode == 1) {
 			timeString = "Game will start in " + std::to_string(10 - game.ready_seconds) + "s";
@@ -292,7 +291,7 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 		if (game.mode == 3) {
 			timeString = winnerString;
 		}
- 		draw_text(timePos, timeString, 0.05f);
+ 		draw_text(timePos, timeString, 0.09f);
 		
 	}
 	GL_ERRORS();

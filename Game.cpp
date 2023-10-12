@@ -174,16 +174,14 @@ void Game::update(float elapsed) {
 		for (auto &p : players) {
 			player_idx ++;
 			if (p.mode == 0) {
-				p.death_time += elapsed;
-				if (p.death_time > 5.0f) {
-					if (predator != player_idx) {
-						p.mode = 2;
-					}
-					else if (predator == player_idx) {
-						p.mode = 1;
-					}
-					p.death_time = 0;
+				if (predator != player_idx) {
+					p.mode = 2;
 				}
+				else if (predator == player_idx) {
+					p.mode = 1;
+					predator_name = p.name;
+				}
+				p.death_time = 0;
 			}
 			if (p.mode == 1) {
 				if (predator != player_idx) {
@@ -193,6 +191,23 @@ void Game::update(float elapsed) {
 			if (p.mode == 2) {
 				if (predator == player_idx) {
 					p.mode = 1;
+					predator_name = p.name;
+				}
+			}
+			if (p.mode == 3) {
+				p.death_time += elapsed;
+				if (predator != player_idx) {
+					if (p.death_time > 5.0f) {
+						p.mode = 2;
+						p.death_time = 0;
+					}
+				}
+				else if (predator == player_idx) {
+					predator_name = p.name;
+					if (p.death_time > 5.0f) {
+						p.mode = 1;
+						p.death_time = 0;
+					}
 				}
 			}
 		}
@@ -201,6 +216,7 @@ void Game::update(float elapsed) {
 	if (mode == 3) {
 		playing_seconds = 0;
 		ready_seconds = 0;
+		predator_name = "";
 		for (auto &p : players) {
 			p.mode = 0;
 		}
@@ -263,7 +279,7 @@ void Game::update(float elapsed) {
 				uint16_t get_score = p2.score - p2.score / 2;
 				p2.score -= get_score;
 				p1.score += get_score;
-				p2.mode = 0;
+				p2.mode = 3;
 				p2.death_time = 0;
 			}
 
@@ -271,7 +287,7 @@ void Game::update(float elapsed) {
 				uint16_t get_score = p1.score - p1.score / 2;
 				p1.score -= get_score;
 				p2.score += get_score;
-				p1.mode = 0;
+				p1.mode = 3;
 				p1.death_time = 0;
 			}
 
@@ -390,6 +406,8 @@ void Game::send_state_message(Connection *connection_, Player *connection_player
 	connection.send(ready_seconds);
 	connection.send(playing_seconds);
 
+	connection.send(predator_name);
+
 	//compute the message size and patch into the message header:
 	uint32_t size = uint32_t(connection.send_buffer.size() - mark);
 	connection.send_buffer[mark-3] = uint8_t(size);
@@ -457,6 +475,8 @@ bool Game::recv_state_message(Connection *connection_) {
 	read(&mode);
 	read(&ready_seconds);
 	read(&playing_seconds);
+
+	read(&predator_name);
 
 	if (at != size) throw std::runtime_error("Trailing data in state message.");
 
