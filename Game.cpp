@@ -136,7 +136,7 @@ void Game::update(float elapsed) {
 		//ready
 		playing_seconds = 0;
 		if (time > 1.0f){
-			ready_seconds += time;
+			ready_seconds += (uint8_t)time;
 			time -= 1.0f;
 		}
 		if (ready_seconds >= 10) {
@@ -152,7 +152,7 @@ void Game::update(float elapsed) {
 		ready_seconds = 0;
 		//playing
 		if (time > 1.0f){
-			playing_seconds += time;
+			playing_seconds += (uint8_t)time;
 			time -= 1.0f;
 		}
 		if (playing_seconds >= 60) {
