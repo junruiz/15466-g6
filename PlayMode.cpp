@@ -140,7 +140,6 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 		2.0f / (Game::ArenaMax.y - Game::ArenaMin.y + 2.0f * Game::PlayerRadius)
 	);
 	float sum = 0.0f;
-	float scoreBoard = 0.2f;
 	glm::vec2 offset = -0.5f * (Game::ArenaMax + Game::ArenaMin);
 
 	glm::mat4 world_to_clip = glm::mat4(
@@ -262,10 +261,16 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 			glm::vec2 scorePos = glm::vec2(scoreBoardMin.x + 0.01f,scoreBoardMax.y-0.2f-sum);
 			draw_text(scorePos, player.name +  ": "+ inputString, 0.09f);
 
-			std::string timeString = std::to_string(game.seconds);
-			glm::vec2 timePos = glm::vec2(scoreBoardMin.x + 0.01f,scoreBoardMax.y-0.5f);
-			draw_text(timePos, "time: "+ timeString + "s", 0.09f);
-			sum+=scoreBoard;
+ 			uint8_t seconds = 0;
+ 			if (game.mode == 1) {
+ 				seconds = game.ready_seconds;
+ 			}
+ 			if (game.mode == 2) {
+ 				seconds = game.playing_seconds;
+ 			}
+ 			std::string timeString = "mode" + std::to_string(game.mode) + ": " + std::to_string(seconds);
+ 			glm::vec2 timePos = glm::vec2(scoreBoardMin.x + 0.01f,scoreBoardMax.y-0.5f);
+ 			draw_text(timePos, "time: "+ timeString + "s", 0.09f);
 		}
 	}
 	GL_ERRORS();
