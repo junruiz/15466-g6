@@ -120,52 +120,88 @@ void Game::remove_player(Player *player) {
 
 void Game::update(float elapsed) {
 	time += elapsed;
-
-	change_predator_time += elapsed;
-	if (change_predator_time >= 15.0f) {
-		//change_predator
-		if (predator == 1) {
-			predator = 2;
+	if (mode == 0) {
+		ready_seconds = 0;
+		playing_seconds = 0;
+		if (time > 1.0f) {
+			time -= 1.0f;
 		}
-		else if (predator == 2) {
-			predator = 1;
+		//waiting for another player to join
+		if (size(players) == 2) {
+			mode = 1;
 		}
-		change_predator_time -= 15.0f;
 	}
 
-	int player_idx = 0;
-	for (auto &p : players) {
-		player_idx ++;
-		if (p.mode == 0) {
+	if (mode == 1) {
+		//ready
+		playing_seconds = 0;
+		if (time > 1.0f){
+			ready_seconds += time;
+			time -= 1.0f;
+		}
+		if (ready_seconds >= 10) {
+			mode = 2;
+			ready_seconds = 0;
+		}
+		for (auto &p : players) {
 			p.death_time += elapsed;
-			if (p.death_time > 5.0f) {
+		}
+	}
+
+	if (mode == 2) {
+		ready_seconds = 0;
+		//playing
+		if (time > 1.0f){
+			playing_seconds += time;
+			time -= 1.0f;
+		}
+		if (playing_seconds >= 60) {
+			mode = 3;
+			playing_seconds = 0;
+		}
+		change_predator_time += elapsed;
+		if (change_predator_time >= 15.0f) {
+			//change_predator
+			if (predator == 1) {
+				predator = 2;
+			}
+			else if (predator == 2) {
+				predator = 1;
+			}
+			change_predator_time -= 15.0f;
+		}
+		int player_idx = 0;
+		for (auto &p : players) {
+			player_idx ++;
+			if (p.mode == 0) {
+				p.death_time += elapsed;
+				if (p.death_time > 5.0f) {
+					if (predator != player_idx) {
+						p.mode = 2;
+					}
+					else if (predator == player_idx) {
+						p.mode = 1;
+					}
+					p.death_time = 0;
+				}
+			}
+			if (p.mode == 1) {
 				if (predator != player_idx) {
 					p.mode = 2;
 				}
-				else if (predator == player_idx) {
+			}
+			if (p.mode == 2) {
+				if (predator == player_idx) {
 					p.mode = 1;
 				}
-				p.death_time = 0;
-			}
-		}
-		if (p.mode == 1) {
-			if (predator != player_idx) {
-				p.mode = 2;
-			}
-		}
-		if (p.mode == 2) {
-			if (predator == player_idx) {
-				p.mode = 1;
 			}
 		}
 	}
-
-	if (time > 1.0f) {
-		time -= 1.0f;
-		seconds += 1;
-	}
-
 	
+	if (mode == 3) {
+		playing_seconds = 0;
+		ready_seconds = 0;
+	}
 
 	//position/velocity update:
 	for (auto &p : players) {
@@ -343,7 +379,9 @@ void Game::send_state_message(Connection *connection_, Player *connection_player
 		send_consumable(consumable);
 	}
 
-	connection.send(seconds);
+	connection.send(mode);
+	connection.send(ready_seconds);
+	connection.send(playing_seconds);
 
 	//compute the message size and patch into the message header:
 	uint32_t size = uint32_t(connection.send_buffer.size() - mark);
@@ -409,7 +447,9 @@ bool Game::recv_state_message(Connection *connection_) {
 		read(&consumable.consumed);
 	}
 
-	read(&seconds);
+	read(&mode);
+	read(&ready_seconds);
+	read(&playing_seconds);
 
 	if (at != size) throw std::runtime_error("Trailing data in state message.");
 
