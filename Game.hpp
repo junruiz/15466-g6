@@ -100,11 +100,8 @@ struct Game {
 
 	//Consumables:
 	std::list< Consumable > consumables = {};
-<<<<<<< HEAD
 
 	
-=======
->>>>>>> 7f16859f572a64609f56cee2492ab445aa31bf42
 
 	//blockes:
 	std::list< Block > blocks = {};

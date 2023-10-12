@@ -18,13 +18,12 @@
 
 
 
-//4. Different player should appear differently Chen
-//9. different consumable should appear differently Note: diffirent color solid circle Zhao 
+// 1. 恶魔的武器，闪烁的身躯 我来吧
+// 2. 减速 15cd +5 spawn consuamble 你来吧
+// 3. 咋哇路都 30cd 对面控1s 我来吧
+// 4. 加速/贤者时间 +3s -2s  15s 你来吧
+// 5. 游戏结束 read me togther 
 
-
-//Extra feature:
-//7.Skill list: 蓄力，加速, 减速弹，眩晕弹
-//8.Different music for Different player
 
 
 
@@ -173,9 +172,16 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 				glm::vec3(H, 0.0f, 0.0f), glm::vec3(0.0f, H, 0.0f),
 				glm::u8vec4(0xff, 0xff, 0xff, 0x00));
 		};
+		
+		auto draw_fork = [&](glm::vec2 at, float len,float width) {
+			lines.draw(glm::vec3(at.x, at.y, 0.0f), glm::vec3(at.x, at.y + len, 0.0f), glm::u8vec4(0xff, 0x00, 0x00, 0xff));
+			lines.draw(glm::vec3(at.x-width, at.y+ 0.66f*len, 0.0f), glm::vec3(at.x+width, at.y+0.66f*len, 0.0f), glm::u8vec4(0xff, 0x00, 0x00, 0xff));
+			lines.draw(glm::vec3(at.x-width, at.y+ 0.66f*len, 0.0f), glm::vec3(at.x-width, (at.y+0.83f*len), 0.0f), glm::u8vec4(0xff, 0x00, 0x00, 0xff));
+			lines.draw(glm::vec3(at.x+width, at.y+ 0.66f*len, 0.0f), glm::vec3(at.x+width, at.y+0.83f*len, 0.0f),glm::u8vec4(0xff, 0x00, 0x00, 0xff));
+		};
 
 
-		;
+		
 
 
 		glm::vec2 scoreBoardMin = glm::vec2((float)Game::ArenaMax.x + 0.01f, (float)Game::ArenaMin.y);
@@ -250,6 +256,10 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 
 			draw_text(player.position + glm::vec2(0.0f, -0.1f + Game::PlayerRadius), player.name, 0.09f);
 			draw_text(player.position + glm::vec2(0.0f, 0.1f + Game::PlayerRadius), std::to_string(player.mode), 0.09f);
+
+			if (player.mode == 1){
+				draw_fork(player.position + glm::vec2(0.05f,-0.05f),0.1f,0.1f/5);
+			}
 
 			//drawing score draws at the topright corner for now
 			std::string inputString = std::to_string(player.score);

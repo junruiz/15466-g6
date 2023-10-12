@@ -1,10 +1,13 @@
-# (TODO: your game's title)
+# Pac Man but you might get eaten by other Pac Man
 
-Author: (TODO: your name)
+Author: Junrui Zhao, Sizhe Chen
 
-Design: (TODO: In two sentences or fewer, describe what is new and interesting about your game.)
+Design: Predator vs prey, try to eat consumables and get as much points as the prey. When you are the predator, try to catch other
+players for points.     
 
-Networking: (TODO: How does your game implement client/server multiplayer? What messages are transmitted? Where in the code?)
+Networking: 
+The network structure is similar to the base code. We also include score/player_mode... information into the message so PlayMode can render
+the corresponding component.
 
 Screen Shot:
 
@@ -12,9 +15,11 @@ Screen Shot:
 
 How To Play:
 
-(TODO: describe the controls and (if needed) goals/strategy.)
+WASD to move your character.
 
-Sources: (TODO: list a source URL for any assets you did not create yourself. Make sure you have a license for the asset.)
+Sources: Base code characters
+
+Extra feature：introducing skills! You can use space to do use your skill if you picked it up somehwere in the areana!
 
 This game was built with [NEST](NEST.md).
 
