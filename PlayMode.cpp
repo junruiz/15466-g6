@@ -19,7 +19,7 @@
 
 //Basic that meets game requirement 
 // Only 2 person, raise error if third join Chen
-//1. Loading text into map  Chen 
+//1. Loading text into map Chen 
 //2. Scoreboard two players updating Chen
 //3. Player mode-switching predator vs prey Zhao
 //4. Different player should appear differently Chen
@@ -93,10 +93,7 @@ bool PlayMode::handle_event(SDL_Event const &evt, glm::uvec2 const &window_size)
 void PlayMode::update(float elapsed) {
 
 	//queue data for sending to server:
-	if (gameReady){
-		controls.send_controls_message(&client.connection);
-	}
-	
+	controls.send_controls_message(&client.connection);
 
 	//reset button press counters:
 
@@ -128,10 +125,6 @@ void PlayMode::update(float elapsed) {
 			}
 		}
 	}, 0.0);
-
-	if (game.players.size() >=2){
-		gameReady = true;
-	}
 }
 
 void PlayMode::draw(glm::uvec2 const &drawable_size) {
@@ -233,6 +226,9 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 
 		for (auto const &player : game.players) {
 			glm::u8vec4 col = glm::u8vec4(player.color.x*255, player.color.y*255, player.color.z*255, 0xff);
+			if (player.mode == 0) {
+				col = glm::u8vec4(rand()%255, rand()%255, rand()%255, 0xff);
+			}
 			if (&player == &game.players.front()) {
 				//mark current player (which server sends first):
 				lines.draw(
@@ -262,7 +258,14 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 			glm::vec2 scorePos = glm::vec2(scoreBoardMin.x + 0.01f,scoreBoardMax.y-0.2f);
 			draw_text(scorePos, player.name +  ": "+ inputString, 0.09f);
 
-			std::string timeString = std::to_string(game.seconds);
+			uint8_t seconds = 0;
+			if (game.mode == 1) {
+				seconds = game.ready_seconds;
+			}
+			if (game.mode == 2) {
+				seconds = game.playing_seconds;
+			}
+			std::string timeString = "mode" + std::to_string(game.mode) + ": " + std::to_string(seconds);
 			glm::vec2 timePos = glm::vec2(scoreBoardMin.x + 0.01f,scoreBoardMax.y-0.5f);
 			draw_text(timePos, "time: "+ timeString + "s", 0.09f);
 		}

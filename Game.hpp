@@ -90,9 +90,17 @@ struct Game {
 	inline static constexpr glm::vec2 ArenaMin = glm::vec2(-1.0f, -1.0f);
 	inline static constexpr glm::vec2 ArenaMax = glm::vec2( 1.0f,  1.0f);
 
+	//game mode
+	//mode 0: waiting
+	//mode 1: preparing
+	//mode 2: playing
+	//mode 3: end
+	int mode = 0;
+
 	//time:
 	float time = 0;
-	uint8_t seconds = 0;
+	uint8_t ready_seconds = 0;
+	uint8_t playing_seconds = 0;
 	float change_predator_time = 0;
 
 	//set predator:
