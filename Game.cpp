@@ -136,7 +136,7 @@ void Game::update(float elapsed) {
 		//ready
 		playing_seconds = 0;
 		if (time > 1.0f){
-			ready_seconds += (uint8_t)time;
+			ready_seconds += 1;
 			time -= 1.0f;
 		}
 		if (ready_seconds >= 10) {
@@ -152,7 +152,7 @@ void Game::update(float elapsed) {
 		ready_seconds = 0;
 		//playing
 		if (time > 1.0f){
-			playing_seconds += (uint8_t)time;
+			playing_seconds += 1;
 			time -= 1.0f;
 		}
 		if (playing_seconds >= 60) {
@@ -201,6 +201,9 @@ void Game::update(float elapsed) {
 	if (mode == 3) {
 		playing_seconds = 0;
 		ready_seconds = 0;
+		for (auto &p : players) {
+			p.mode = 0;
+		}
 	}
 
 	//position/velocity update:
