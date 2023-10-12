@@ -223,7 +223,16 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 			}
 		}
 
+		float idx = 0;
+		int p1score = 0;
+		int p2score = 0;
 		for (auto const &player : game.players) {
+			idx ++;
+			if (idx == 1) {
+				p1score = player.score;
+			} else {
+				p2score = player.score;
+			}
 			glm::u8vec4 col = glm::u8vec4(player.color.x*255, player.color.y*255, player.color.z*255, 0xff);
 			if (player.mode == 0) {
 				col = glm::u8vec4(rand()%255, rand()%255, rand()%255, 0xff);
@@ -258,20 +267,28 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 
 			//drawing score draws at the topright corner for now
 			std::string inputString = std::to_string(player.score);
-			glm::vec2 scorePos = glm::vec2(scoreBoardMin.x + 0.01f,scoreBoardMax.y-0.2f-sum);
+			glm::vec2 scorePos = glm::vec2(scoreBoardMin.x + 0.01f,scoreBoardMax.y-sum-0.2f-0.2f*idx);
 			draw_text(scorePos, player.name +  ": "+ inputString, 0.09f);
-
- 			uint8_t seconds = 0;
- 			if (game.mode == 1) {
- 				seconds = game.ready_seconds;
- 			}
- 			if (game.mode == 2) {
- 				seconds = game.playing_seconds;
- 			}
- 			std::string timeString = "mode" + std::to_string(game.mode) + ": " + std::to_string(seconds);
- 			glm::vec2 timePos = glm::vec2(scoreBoardMin.x + 0.01f,scoreBoardMax.y-0.5f);
- 			draw_text(timePos, "time: "+ timeString + "s", 0.09f);
 		}
+		std::string timeString = "";
+		std::string winnerString = p1score > p2score ? "Game End! Winner is Player 1" : 
+				 	   			   p2score > p1score ? "Game End! Winner is Player 2" : "Draw";
+		
+		glm::vec2 timePos = glm::vec2(scoreBoardMin.x + 0.01f,scoreBoardMax.y-sum-0.2f);
+		if (game.mode == 0) {
+			timeString = "Waiting for another player";
+		}
+ 		if (game.mode == 1) {
+			timeString = "Game will start in " + std::to_string(10 - game.ready_seconds) + "s";
+ 		}
+ 		if (game.mode == 2) {
+			timeString = "Countdown: " + std::to_string(60 - game.playing_seconds) + "s";
+ 		}
+		if (game.mode == 3) {
+			timeString = winnerString;
+		}
+ 		draw_text(timePos, timeString, 0.05f);
+		
 	}
 	GL_ERRORS();
 }
