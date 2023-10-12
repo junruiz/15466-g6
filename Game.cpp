@@ -260,13 +260,17 @@ void Game::update(float elapsed) {
 			// if (len2 == 0.0f) continue;
 
 			if (p1.mode == 1 && p2.mode == 2) {
-				p1.score += 5;
+				uint16_t get_score = p2.score - p2.score / 2;
+				p2.score -= get_score;
+				p1.score += get_score;
 				p2.mode = 0;
 				p2.death_time = 0;
 			}
 
 			if (p1.mode == 2 && p2.mode == 1) {
-				p2.score += 5;
+				uint16_t get_score = p1.score - p1.score / 2;
+				p1.score -= get_score;
+				p2.score += get_score;
 				p1.mode = 0;
 				p1.death_time = 0;
 			}
@@ -326,7 +330,7 @@ void Game::update(float elapsed) {
 				touch_dist = 2 * consumable_size + PlayerRadius;
 				cons_score = 2;
 			} 
-			if (p1.mode != 0 && consumable.consumed == false && len2 < touch_dist * touch_dist) {
+			if (p1.mode == 2 && consumable.consumed == false && len2 < touch_dist * touch_dist) {
 				p1.score += cons_score;
 				consumable.consumed = true;
 			}
