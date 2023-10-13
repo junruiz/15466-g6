@@ -54,9 +54,9 @@ bool PlayMode::handle_event(SDL_Event const &evt, glm::uvec2 const &window_size)
 			controls.down.downs += 1;
 			controls.down.pressed = true;
 			return true;
-		} else if (evt.key.keysym.sym == SDLK_SPACE) {
-			controls.jump.downs += 1;
-			controls.jump.pressed = true;
+		} else if (evt.key.keysym.sym == SDLK_r) {
+			controls.restart.downs += 1;
+			controls.restart.pressed = true;
 			return true;
 		}
 	} else if (evt.type == SDL_KEYUP) {
@@ -72,8 +72,8 @@ bool PlayMode::handle_event(SDL_Event const &evt, glm::uvec2 const &window_size)
 		} else if (evt.key.keysym.sym == SDLK_s) {
 			controls.down.pressed = false;
 			return true;
-		} else if (evt.key.keysym.sym == SDLK_SPACE) {
-			controls.jump.pressed = false;
+		} else if (evt.key.keysym.sym == SDLK_r) {
+			controls.restart.pressed = false;
 			return true;
 		}
 	}
@@ -92,7 +92,7 @@ void PlayMode::update(float elapsed) {
 	controls.right.downs = 0;
 	controls.up.downs = 0;
 	controls.down.downs = 0;
-	controls.jump.downs = 0;
+	controls.restart.downs = 0;
 
 	//send/receive data:
 	client.poll([this](Connection *c, Connection::Event event){
@@ -290,6 +290,8 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
  		}
 		if (game.mode == 3) {
 			timeString = winnerString;
+			glm::vec2 restartPos = glm::vec2(scoreBoardMin.x + 0.01f,scoreBoardMax.y-sum-1.2f);
+			draw_text(restartPos, "Press R to restart", 0.09f);
 		}
  		draw_text(timePos, timeString, 0.09f);
 		

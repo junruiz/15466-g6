@@ -34,7 +34,7 @@ void Player::Controls::send_controls_message(Connection *connection_) const {
 	send_button(right);
 	send_button(up);
 	send_button(down);
-	send_button(jump);
+	send_button(restart);
 }
 
 bool Player::Controls::recv_controls_message(Connection *connection_) {
@@ -68,7 +68,7 @@ bool Player::Controls::recv_controls_message(Connection *connection_) {
 	recv_button(recv_buffer[4+1], &right);
 	recv_button(recv_buffer[4+2], &up);
 	recv_button(recv_buffer[4+3], &down);
-	recv_button(recv_buffer[4+4], &jump);
+	recv_button(recv_buffer[4+4], &restart);
 
 	//delete message from buffer:
 	recv_buffer.erase(recv_buffer.begin(), recv_buffer.begin() + 4 + size);
@@ -127,8 +127,17 @@ void Game::update(float elapsed) {
 			time -= 1.0f;
 		}
 		//waiting for another player to join
-		if (size(players) == 2) {
+		int joined = 0;
+		for (auto &p : players) {
+			if (p.ready) {
+				joined ++;
+			}
+		}
+		if (joined == 2) {
 			mode = 1;
+			for (auto &consumable :consumables) {
+				consumable.consumed = false;
+			}
 		}
 	}
 
@@ -158,6 +167,10 @@ void Game::update(float elapsed) {
 		if (playing_seconds >= 60) {
 			mode = 3;
 			playing_seconds = 0;
+			for (auto &p: players) {
+				p.ready = false;
+				p.mode = 0;
+			}
 		}
 		change_predator_time += elapsed;
 		if (change_predator_time >= 15.0f) {
@@ -214,12 +227,13 @@ void Game::update(float elapsed) {
 	}
 	
 	if (mode == 3) {
+		for (auto &p: players) {
+			p.mode = 0;
+		}
+		time = 0;
 		playing_seconds = 0;
 		ready_seconds = 0;
 		predator_name = "";
-		for (auto &p : players) {
-			p.mode = 0;
-		}
 	}
 
 	//position/velocity update:
@@ -229,6 +243,14 @@ void Game::update(float elapsed) {
 		if (p.controls.right.pressed) dir = glm::vec2(1.0f, 0.0f);
 		if (p.controls.down.pressed) dir = glm::vec2(0.0f, -1.0f);
 		if (p.controls.up.pressed) dir = glm::vec2(0.0f, 1.0f);
+		if ((mode == 3 || mode == 0) && p.controls.restart.pressed) {
+			mode = 0;
+			p.score = 0;
+			p.velocity = glm::vec2(0.0f, 0.0f);
+			p.mode = 0;
+			p.death_time = 0;
+			p.ready = true;
+		}
 
 		if (dir == glm::vec2(0.0f)) {
 			//no inputs: just drift to a stop
@@ -261,7 +283,7 @@ void Game::update(float elapsed) {
 		p.controls.right.downs = 0;
 		p.controls.up.downs = 0;
 		p.controls.down.downs = 0;
-		p.controls.jump.downs = 0;
+		p.controls.restart.downs = 0;
 	}
 
 	//collision resolution:
