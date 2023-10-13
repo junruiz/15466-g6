@@ -54,6 +54,10 @@ struct Player {
 	float death_time = 0;
 	//Added player attribution
 	uint16_t score = 0;
+
+	//max speed_sp is 10;
+	int speed_sp = 0;
+	int speedsp_inc = 1;
 };
 
 struct Block {

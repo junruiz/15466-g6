@@ -172,6 +172,7 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 			lines.draw(glm::vec3(at.x+width, at.y+ 0.66f*len, 0.0f), glm::vec3(at.x+width, at.y+0.83f*len, 0.0f),glm::u8vec4(0xff, 0x00, 0x00, 0xff));
 		};
 
+		// score board
 		glm::vec2 scoreBoardMin = glm::vec2((float)Game::ArenaMax.x + 0.01f, (float)Game::ArenaMin.y);
 		glm::vec2 scoreBoardMax = glm::vec2((float)Game::ArenaMax.x + 0.8f, (float)Game::ArenaMax.y);
 
@@ -179,6 +180,16 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 		lines.draw(glm::vec3(scoreBoardMin.x, scoreBoardMax.y, 0.0f), glm::vec3(scoreBoardMax.x, scoreBoardMax.y, 0.0f), glm::u8vec4(0xff, 0x00, 0xff, 0xff));
 		lines.draw(glm::vec3(scoreBoardMin.x, scoreBoardMin.y, 0.0f), glm::vec3(scoreBoardMin.x, scoreBoardMax.y, 0.0f), glm::u8vec4(0xff, 0x00, 0xff, 0xff));
 		lines.draw(glm::vec3(scoreBoardMax.x, scoreBoardMin.y, 0.0f), glm::vec3(scoreBoardMax.x, scoreBoardMax.y, 0.0f), glm::u8vec4(0xff, 0x00, 0xff, 0xff));
+
+		// skill list
+		glm::vec2 skillListMin = glm::vec2((float)Game::ArenaMin.x - 0.8f, (float)Game::ArenaMin.y);
+		glm::vec2 skillListMax = glm::vec2((float)Game::ArenaMin.x - 0.01f, (float)Game::ArenaMax.y);
+
+		lines.draw(glm::vec3(skillListMin.x, skillListMin.y, 0.0f), glm::vec3(skillListMax.x, skillListMin.y, 0.0f), glm::u8vec4(0xff, 0x00, 0xff, 0xff));
+		lines.draw(glm::vec3(skillListMin.x, skillListMax.y, 0.0f), glm::vec3(skillListMax.x, skillListMax.y, 0.0f), glm::u8vec4(0xff, 0x00, 0xff, 0xff));
+		lines.draw(glm::vec3(skillListMin.x, skillListMin.y, 0.0f), glm::vec3(skillListMin.x, skillListMax.y, 0.0f), glm::u8vec4(0xff, 0x00, 0xff, 0xff));
+		lines.draw(glm::vec3(skillListMax.x, skillListMin.y, 0.0f), glm::vec3(skillListMax.x, skillListMax.y, 0.0f), glm::u8vec4(0xff, 0x00, 0xff, 0xff));
+
 
 		//float moveX = -100.0f;
 		lines.draw(glm::vec3(Game::ArenaMin.x, Game::ArenaMin.y, 0.0f), glm::vec3(Game::ArenaMax.x, Game::ArenaMin.y, 0.0f), glm::u8vec4(0xff, 0x00, 0xff, 0xff));
@@ -273,6 +284,17 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 			if (game.mode == 2 && game.predator_name == player.name) {
 				draw_text(predatorPos, "Predator: " + player.name, 0.09f);
 			}
+
+			//draw skill list at topleft corner
+			glm::vec2 name_pos = glm::vec2(skillListMin.x + 0.01f,skillListMax.y-sum+0.2f-0.4f*idx);
+			draw_text(name_pos, player.name + " speed sp: ", 0.09f);
+			lines.draw(glm::vec3(skillListMin.x + 0.1f, skillListMax.y-sum+0.1f-0.4f*idx, 0.0f), glm::vec3(skillListMin.x + 0.1f,  skillListMax.y-sum-0.1f-0.4f*idx, 0.0f), glm::u8vec4(0xff, 0x00, 0xff, 0xff));
+			lines.draw(glm::vec3(skillListMax.x - 0.1f, skillListMax.y-sum-0.1f-0.4f*idx, 0.0f), glm::vec3(skillListMax.x - 0.1f,  skillListMax.y-sum+0.1f-0.4f*idx, 0.0f), glm::u8vec4(0xff, 0x00, 0xff, 0xff));
+			lines.draw(glm::vec3(skillListMin.x + 0.1f, skillListMax.y-sum+0.1f-0.4f*idx, 0.0f), glm::vec3(skillListMax.x - 0.1f,  skillListMax.y-sum+0.1f-0.4f*idx, 0.0f), glm::u8vec4(0xff, 0x00, 0xff, 0xff));
+			lines.draw(glm::vec3(skillListMin.x + 0.1f, skillListMax.y-sum-0.1f-0.4f*idx, 0.0f), glm::vec3(skillListMax.x - 0.1f,  skillListMax.y-sum-0.1f-0.4f*idx, 0.0f), glm::u8vec4(0xff, 0x00, 0xff, 0xff));
+
+			float new_pos_sp = (skillListMax.x - skillListMin.x - 0.2f) / 10 * player.speed_sp;
+			lines.draw(glm::vec3(skillListMin.x + 0.1f + new_pos_sp, skillListMax.y-sum+0.1f-0.4f*idx, 0.0f), glm::vec3(skillListMin.x + 0.1f + new_pos_sp,  skillListMax.y-sum-0.1f-0.4f*idx, 0.0f), glm::u8vec4(0xff, 0x00, 0x00, 0xff));
 		}
 		std::string timeString = "";
 		std::string winnerString = p1score > p2score ? "Winner is " + p1name : 

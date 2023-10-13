@@ -154,15 +154,26 @@ void Game::update(float elapsed) {
 		}
 		for (auto &p : players) {
 			p.death_time += elapsed;
+			p.speed_sp = 0;
 		}
 	}
 
 	if (mode == 2) {
 		ready_seconds = 0;
 		//playing
-		if (time > 1.0f){
+		if (time > 1.0f) {
 			playing_seconds += 1;
 			time -= 1.0f;
+			for (auto &p: players) {
+				p.speed_sp += p.speedsp_inc;
+				if (p.speed_sp < 0) {
+					p.speed_sp = 0;
+				}
+				if (p.speed_sp > 10) {
+					p.speed_sp = 10;
+				}
+				p.speedsp_inc = 1;
+			}
 		}
 		if (playing_seconds >= 60) {
 			mode = 3;
@@ -239,16 +250,22 @@ void Game::update(float elapsed) {
 	//position/velocity update:
 	for (auto &p : players) {
 		glm::vec2 dir = glm::vec2(0.0f, 0.0f);
-		if (p.controls.left.pressed) dir = glm::vec2(-1.0f, 0.0f);
-		if (p.controls.right.pressed) dir = glm::vec2(1.0f, 0.0f);
-		if (p.controls.down.pressed) dir = glm::vec2(0.0f, -1.0f);
-		if (p.controls.up.pressed) dir = glm::vec2(0.0f, 1.0f);
+		if (p.controls.left.pressed) dir = glm::vec2(-1.0f - p.speed_sp * 0.1f, 0.0f);
+		if (p.controls.right.pressed) dir = glm::vec2(1.0f + p.speed_sp * 0.1f, 0.0f);
+		if (p.controls.down.pressed) dir = glm::vec2(0.0f, -1.0f - p.speed_sp * 0.1f);
+		if (p.controls.up.pressed) dir = glm::vec2(0.0f, 1.0f + p.speed_sp * 0.1f);
+
+		else if (dir != glm::vec2(0.0f, 0.0f)) {
+			p.speedsp_inc = -1;
+		}
+		
 		if ((mode == 3 || mode == 0) && p.controls.restart.pressed) {
 			mode = 0;
 			p.score = 0;
 			p.velocity = glm::vec2(0.0f, 0.0f);
 			p.mode = 0;
 			p.death_time = 0;
+			p.speed_sp = 0;
 			p.ready = true;
 		}
 
@@ -259,22 +276,6 @@ void Game::update(float elapsed) {
 			p.velocity = glm::vec2(0.0f, 0.0f);
 		} else {
 			//inputs: tween velocity to target direction
-
-			dir = glm::normalize(dir);
-
-			// float amt = 1.0f - std::pow(0.5f, elapsed / PlayerAccelHalflife);
-
-			// //accelerate along velocity (if not fast enough):
-			// float along = glm::dot(p.velocity, dir);
-			// if (along < PlayerSpeed) {
-			// 	along = glm::mix(along, PlayerSpeed, amt);
-			// }
-
-			// //damp perpendicular velocity:
-			// float perp = glm::dot(p.velocity, glm::vec2(-dir.y, dir.x));
-			// perp = glm::mix(perp, 0.0f, amt);
-
-			// p.velocity = dir * along + glm::vec2(-dir.y, dir.x) * perp;
 			p.velocity = dir * 0.5f;
 		}
 		p.position += p.velocity * elapsed;
@@ -396,6 +397,7 @@ void Game::send_state_message(Connection *connection_, Player *connection_player
 		connection.send(player.color);
 		connection.send(player.score);
 		connection.send(player.mode);
+		connection.send(player.speed_sp);
 	
 		//NOTE: can't just 'send(name)' because player.name is not plain-old-data type.
 		//effectively: truncates player name to 255 chars
@@ -471,6 +473,7 @@ bool Game::recv_state_message(Connection *connection_) {
 		read(&player.color);
 		read(&player.score);
 		read(&player.mode);
+		read(&player.speed_sp);
 		uint8_t name_len;
 		read(&name_len);
 		//n.b. would probably be more efficient to directly copy from recv_buffer, but I think this is clearer:
